@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 
-
 import sys
 import time
-
 
 def factorize(num):
     """
@@ -15,46 +13,40 @@ def factorize(num):
             return (factor, num // factor)
     return None
 
-
 if __name__ == "__main__":
-
-
-    '''Reads the input file.
-    '''
+    # Check if the correct number of command-line arguments is provided
     if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-        exit()
-
+        print("Usage: ./factors <file>")
+        sys.exit(1)
 
     input_file = sys.argv[1]
-
 
     try:
         with open(input_file, 'r') as f:
             lines = f.readlines()
     except FileNotFoundError:
-        print("File not found")
-        exit()
-
+        print(f"Error: File '{input_file}' not found.")
+        sys.exit(1)
 
     start_time = time.time()
 
-
-    '''loops over each line (which should contain one natural number per line),
-     and calls factorize on each number.
-        If factorize returns a tuple of factors,
-        it prints the factorization in the desired forma
-    '''
+    # Loop over each line in the input file
     for line in lines:
-        num = int(line.strip())
+        # Convert the line to an integer
+        try:
+            num = int(line.strip())
+        except ValueError:
+            print(f"Error: Invalid input in file '{input_file}'. Make sure all lines contain valid integers.")
+            sys.exit(1)
+
+        # Call the factorize function
         factors = factorize(num)
+        
+        # If factors are found, print the factorization
         if factors:
-            print(f"{num}={factors[0]}*{factors[1]}")
+            print(f"{num} = {factors[0]} * {factors[1]}")
 
-
-        '''If the elapsed time exceeds 5 seconds,
-            the program exits with an error message.
-        '''
+        # Check elapsed time and exit if time limit exceeded
         if time.time() - start_time > 5:
-            print("Time limit exceeded")
-            exit()
+            print("Error: Time limit exceeded (5 seconds).")
+            sys.exit(1)
